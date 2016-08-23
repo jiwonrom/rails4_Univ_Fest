@@ -1,0 +1,63 @@
+<head>
+  <!-- 검색 최적화 -->
+  <%
+    description = "다른 대학의 축제는 어딨는지 궁금하시다고요? 특정 가수가 방문하는 축제만 알아보고 싶나요? 여기서 모두 검색해보세요"
+    site_title = "대학 축제"
+    title_img_src = "http://univfestival.info/assets/title_img.jpg"
+  %>
+  <title><%=site_title%></title>
+  <meta name="description" content="<%= description %>">
+  <link rel="shortcut icon" href="favicon.ico">
+  <meta name="referrer" content="always">
+  
+  <!-- BEGIN OPENGRAPH -->
+  <link rel="canonical" href="http://www.univfestival.info/" /><meta property="og:type" content="website" /><meta property="og:site_name" content="<%= site_title %>" ><meta property="og:title" content="<%= site_title %>" ><meta property="og:description" content="<%= description %>" ><meta property="og:image" content="<%= title_img_src %>" >
+  <!-- END OPENGRAPH -->
+  
+  
+  
+  <!-- BEGIN TWITTERCARD -->
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="<%= site_title %>" ><meta name="twitter:description" content="<%= description %>" ><meta property="twitter:image" content="<%= title_img_src %>" >
+  <!-- END TWITTERCARD -->
+  
+  
+  
+  <!-- BEGIN STRUCTURED_DATA -->
+  <script type="application/ld+json">{"@context":"http://schema.org", "@type":"ItemList","itemListElement":[{"@type":"ListItem", "position":1,"item": {"@id":"/result","name":"Post List"}}]}</script>
+  <!-- END STRUCTURED_DATA -->
+</head>
+  <!-- Search Snippet --> 
+    <header>
+        <div class="container";>
+            <div class="intro-text">
+                <div class="container">
+                	<div class="row">
+                		<h2 style="font-family:Jeju Gothic, sans-serif;">축제 검색</h2>
+                		<form action="/result" method="get">
+                            <div id="custom-search-input">
+                                <div class="input-group col-md-offset-2 col-md-8 col-md-offset-2">
+                                    <input type="text" name="to_find" id="tags" class="search-query form-control" style="font-family:Nanum Gothic, sans-serif;" placeholder="가고싶은 대학, 보고싶은 연예인을 입력하세요" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="submit">
+                                                <span class=" glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </span>
+                                </div>
+                            </div>
+                        </form>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>  
+</div>
+
+<script>
+      $(function() {
+        var availableTags = <%= (Project.group(:univ).map(&:univ) + 
+        Project.group(:lineup).map(&:lineup)).to_json.html_safe %>;
+        $( "#tags" ).autocomplete({
+          source: availableTags
+        });
+      });
+</script>   

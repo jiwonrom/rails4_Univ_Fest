@@ -1,0 +1,52 @@
+<head>
+  <!-- 검색 최적화 -->
+  <%
+    description = "대학 축제 사이트는 멋쟁이 사자처럼 한양대에서 제작하였습니다"
+    site_title = "대학 축제 만든이"
+    title_img_src = "http://univfestival.info/assets/title_img.jpg"
+  %>
+  <title><%=site_title%></title>
+  <meta name="description" content="<%= description %>">
+  <link rel="shortcut icon" href="favicon.ico">
+  <meta name="referrer" content="always">
+  
+  <!-- BEGIN OPENGRAPH -->
+  <link rel="canonical" href="http://www.univfestival.info/" /><meta property="og:type" content="website" /><meta property="og:site_name" content="<%= site_title %>" ><meta property="og:title" content="<%= site_title %>" ><meta property="og:description" content="<%= description %>" ><meta property="og:image" content="<%= title_img_src %>" >
+  <!-- END OPENGRAPH -->
+  
+  
+  
+  <!-- BEGIN TWITTERCARD -->
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="<%= site_title %>" ><meta name="twitter:description" content="<%= description %>" ><meta property="twitter:image" content="<%= title_img_src %>" >
+  <!-- END TWITTERCARD -->
+  
+  
+  
+  <!-- BEGIN STRUCTURED_DATA -->
+  <script type="application/ld+json">{"@context":"http://schema.org", "@type":"ItemList","itemListElement":[{"@type":"ListItem", "position":1,"item": {"@id":"/result","name":"Post List"}}]}</script>
+  <!-- END STRUCTURED_DATA -->
+</head>
+    <div class="container" style="font-family:Jeju Gothic, sans-serif;">
+        <div class="white_box jumbotron col-md-12">
+                        
+        <div class="logo col-md-4">
+            <h1 class="contact_logo" align="center"> <img src="/assets/likelion_logo.png" width="100px;">x<img width="100px;" src="/assets/한양대.jpg" style="vertical-align:middle" class="logo_shape_round"> </h1>
+        </div>
+                      
+        <div class="name col-md-5" style="margin-top:32px" >
+            <h1 style="color:black; font-size:54px" align="center" > 한양대학교 </h1> 
+            <h1 style="color:black; font-size:38px" align="center" > <a href="http://likelion.net/" target="_blank" style="color:black"> 멋쟁이사자처럼 </a></h1> 
+            <h1 style="color:black; font-size:24px" align="center" > 제보 : 010_9033@naver.com </h1> 
+        </div>
+                      
+        <div class="list col-md-3">
+                <h2 class="makers_txt" align="right"> 강수정 </h2>
+                <a href="http://jiwonrom.tistory.com" target="_blank"><h2 class="makers_txt" align="right"> 노지원 </h2></a>
+                <h2 class="makers_txt" align="right"> 박창대 </h2>
+                <h2 class="makers_txt" align="right"> 박태연 </h2>
+                <a href="http://itncode.tistory.com" target="_blank"><h2 class="makers_txt" align="right"> 정승호 </h2></a>
+                <h2 class="makers_txt" align="right"> 최재혁 </h2>
+        </div>
+                  
+        </div>
+    </div>

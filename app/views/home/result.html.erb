@@ -1,0 +1,158 @@
+<head>
+  <!-- 검색 최적화 -->
+  <%
+    description = "다른 대학의 축제는 어딨는지 궁금하시다고요? 특정 가수가 방문하는 축제만 알아보고 싶나요? 여기서 모두 검색해보세요"
+    site_title = "대학 축제"
+    title_img_src = "http://univfestival.info/assets/title_img.jpg"
+  if(@univ.presence) #대학 이름으로 검색시
+    description = "2016년 #{params[:to_find]} 축제 라인업에는 #{@univ.map{|x| x['lineup']}.uniq.join(',')}이 있습니다"
+    site_title = "#{params[:to_find]} 축제 라인업 2016년"
+  end
+  if(@lineup.presence) #연예인 이름으로 검색시
+    description = "2016년 #{params[:to_find]}는 #{@lineup.map{|x| x['univ']}.uniq.join(',')} 축제에 참여합니다"
+    site_title = "#{params[:to_find]} 축제 라인업 2016년"
+  end
+  %>
+  <title><%=site_title%></title>
+  <meta name="description" content="<%= description %>">
+  <link rel="shortcut icon" href="favicon.ico">
+  <meta name="referrer" content="always">
+  
+  <!-- BEGIN OPENGRAPH -->
+  <link rel="canonical" href="http://www.univfestival.info/" /><meta property="og:type" content="website" /><meta property="og:site_name" content="<%= site_title %>" ><meta property="og:title" content="<%= site_title %>" ><meta property="og:description" content="<%= description %>" ><meta property="og:image" content="<%= title_img_src %>" >
+  <!-- END OPENGRAPH -->
+  
+  
+  
+  <!-- BEGIN TWITTERCARD -->
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="<%= site_title %>" ><meta name="twitter:description" content="<%= description %>" ><meta property="twitter:image" content="<%= title_img_src %>" >
+  <!-- END TWITTERCARD -->
+  
+  
+  
+  <!-- BEGIN STRUCTURED_DATA -->
+  <script type="application/ld+json">{"@context":"http://schema.org", "@type":"ItemList","itemListElement":[{"@type":"ListItem", "position":1,"item": {"@id":"/result","name":"Post List"}}]}</script>
+  <!-- END STRUCTURED_DATA -->
+</head>
+    <div class="container" style="margin-top:10px; text-align:left; font-family:Jeju Gothic, sans-serif;">
+        <div class="container">
+            <div class="row">
+                <div class="intro-text">
+                <div class="container">
+                	<div class="row">
+                		<h2 style="font-family:Jeju Gothic, sans-serif; text-align:center; color:white">축제 검색</h2>
+                		<form action="/result" method="get">
+                            <div id="custom-search-input">
+                                <div class="input-group col-md-offset-2 col-md-8 col-md-offset-2">
+                                    <input id="tags" type="text" name="to_find" class="search-query form-control" style="font-family:Nanum Gothic, sans-serif;" placeholder="가고싶은 대학, 보고싶은 연예인을 입력하세요" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="submit">
+                                                <span class=" glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </span>
+                                </div>
+                            </div>
+                        </form>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <!-- 대학이름으로 검색시-->
+    <% if(@univ.presence)%>
+    <% @univ.group(:univ).each do |n| %>
+        <div class="white_box jumbotron col-md-offset-2 col-md-8 col-md-offset-2 col-xs-12" style="">
+            
+            <!-- logo & name -->
+            <%
+              shape = "round"
+              none_univ = ["남서울대","인천대","추계예술대", "경기대(서울)", "서경대","신한대","한국폴리텍대"]
+              t_shape_univ = [ "동국대","한국기술교대"]
+              if(t_shape_univ.include?n.univ)
+                  shape = "T"
+              end
+              if(none_univ.include?n.univ)
+                  shape = "none"
+              end
+            %>
+            <div class="container col-md-6">
+                <h1 class="univ_title" align="center" > <%= n.univ %> </h1>
+                <h1 align="center"> <img src="/assets/<%=n.univ%>.jpg" class ="logo_shape_<%= shape %>"> </h1>
+            </div>
+              
+            <!-- list -->
+              
+            <div class="container col-md-6">
+                <table class="table table-fixed_Right" style="font-size:20px">
+                     <tbody>
+                        <% @univ.where("univ = ?", n.univ).group(:date).each do |u| %>
+                            <tr> <td class="col-xs-12"> <%= u.date %>일 
+                                <% @univ.where("univ = ? AND date = ?", n.univ, u.date).order(:lineup).each do |d| %>
+                                <% @count = @univ.where("univ = ? AND date = ?", n.univ, u.date).each.count %>
+                                    <a href="/result/<%= d.lineup %>"><%= d.lineup %></a>
+                                    <% if( @counts < @count) %>
+                                    ,
+                                    <% @counts = @counts+1 %>
+                                    <%end%>
+                                <%end%>
+                                <% @counts = 1 %>
+                            </td> </tr> 
+                        <%end%>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        <%end%>
+        
+    <%elsif(@lineup.presence)%>
+    </div>
+    
+    <div class="container" style="margin-top:10px; text-align:left; font-family:Jeju Gothic, sans-serif;">
+        <!-- 가수이름으로 검색시-->
+        <% @lineup.group(:lineup).each do |n| %>
+        <div class="white_box jumbotron col-md-offset-2 col-md-8 col-md-offset-2 col-xs-12" style="">
+              
+            <!-- name -->
+            <div class="container col-md-6" style="margin-top:50px">
+                <h1 class="univ_title" align="center" > <%= n.lineup %> </h1>
+            </div>
+              
+            <!-- list -->
+              
+            <div class="container col-md-6">
+                <table class="table table-fixed_Right" style="font-size:20px">
+                     <tbody>
+                        <% @lineup.where("lineup = ?", n.lineup).order(:date).each do |u| %>
+                            <tr> <td class="col-xs-12"> <%= u.date %>일 <a href="/result/<%= u.univ %>"><%= u.univ %></a> </td> </tr>
+                        <%end%>
+                    </tbody>
+                </table>
+            </div>
+        
+        </div>
+        <%end%>
+        
+    <!-- 예외 처리 -->
+    
+    <%else%>
+        <div class="white_box jumbotron col-md-offset-2 col-md-8 col-md-offset-2 col-xs-12" style="">
+            <div class="container" style="">
+                <h1 style="color:black; font-size:32px" align="center" > 결과값이 없습니다. </h1>
+                <h1 style="color:black; font-size:24px" align="center" > 제보 : 010_9033@naver.com </h1>
+            </div>
+        </div>
+    <%end%>
+    </div>
+</div>
+        
+<script>
+      $(function() {
+        var availableTags = <%= (Project.group(:univ).map(&:univ) + 
+        Project.group(:lineup).map(&:lineup)).to_json.html_safe %>;
+        $( "#tags" ).autocomplete({
+          source: availableTags
+        });
+      });
+</script>       
+    

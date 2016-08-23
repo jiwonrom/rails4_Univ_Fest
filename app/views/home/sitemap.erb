@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://univfestival.info/</loc>
+</url>
+<url>
+  <loc>http://univfestival.info/result</loc>
+</url>
+<url>
+  <loc>http://univfestival.info/contact</loc>
+</url>
+<%@univ.each do |univ|%>
+<url>
+  <loc>http://univfestival.info/result/<%=univ%></loc>
+</url>
+<%end%>
+<%@lineup.each do |univ|%>
+<url>
+  <loc>http://univfestival.info/result/<%=univ%></loc>
+</url>
+<%end%>
+</urlset>

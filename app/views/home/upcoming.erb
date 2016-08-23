@@ -1,0 +1,148 @@
+<head>
+  <!-- 검색 최적화 -->
+  <%
+    description = "다른 대학의 축제는 어딨는지 궁금하시다고요? 특정 가수가 방문하는 축제만 알아보고 싶나요? 여기서 모두 검색해보세요"
+    site_title = "내일의 축제정보"
+    title_img_src = "http://univfestival.info/assets/title_img.jpg"
+  if(@univ.presence) #대학 이름으로 검색시
+    description = "2016년 진행중인 축제 학교에는 #{@univ.map{|x| x['univ']}.uniq.join(',')}이 있습니다"
+  end
+  %>
+  <title><%=site_title%></title>
+  <meta name="description" content="<%= description %>">
+  <link rel="shortcut icon" href="favicon.ico">
+  <meta name="referrer" content="always">
+  
+  <!-- BEGIN OPENGRAPH -->
+  <link rel="canonical" href="http://www.univfestival.info/" /><meta property="og:type" content="website" /><meta property="og:site_name" content="<%= site_title %>" ><meta property="og:title" content="<%= site_title %>" ><meta property="og:description" content="<%= description %>" ><meta property="og:image" content="<%= title_img_src %>" >
+  <!-- END OPENGRAPH -->
+  
+  
+  
+  <!-- BEGIN TWITTERCARD -->
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="<%= site_title %>" ><meta name="twitter:description" content="<%= description %>" ><meta property="twitter:image" content="<%= title_img_src %>" >
+  <!-- END TWITTERCARD -->
+  
+  
+  
+  <!-- BEGIN STRUCTURED_DATA -->
+  <script type="application/ld+json">{"@context":"http://schema.org", "@type":"ItemList","itemListElement":[{"@type":"ListItem", "position":1,"item": {"@id":"/result","name":"Post List"}}]}</script>
+  <!-- END STRUCTURED_DATA -->
+</head>
+    <div class="container" style="margin-top:10px; text-align:left; font-family:Jeju Gothic, sans-serif;">
+        <div class="container">
+            <div class="row">
+                <div class="intro-text">
+                <div class="container">
+                	<div class="row">
+                		<h2 style="font-family:Jeju Gothic, sans-serif; text-align:center; color:white"><%=site_title %></h2>
+                		<form action="/result" method="POST">
+                            <div id="custom-search-input">
+                                <div class="input-group col-md-offset-2 col-md-8 col-md-offset-2">
+                                    <input id="tags" type="text" name="to_find" class="search-query form-control" style="font-family:Nanum Gothic, sans-serif;" placeholder="가고싶은 대학, 보고싶은 연예인을 입력하세요" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-danger" type="submit">
+                                                <span class=" glyphicon glyphicon-search"></span>
+                                            </button>
+                                        </span>
+                                </div>
+                            </div>
+                        </form>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    <!-- 대학이름으로 검색시-->
+    
+    <% if(@univ.presence)%>
+	    <div class="lists" style="margin: 50px auto; background-color:rgba(0,0,0,.3);border-radius:10px">
+            <ul><div class="container">
+            <% @univ.group(:univ).each do |n| %>
+            <!-- logo & name -->
+            <%
+              shape = "round"
+              none_univ = ["남서울대","인천대","추계예술대", "경기대(서울)", "서경대","신한대"]
+              t_shape_univ = [ "동국대","한국기술교대"]
+              if(t_shape_univ.include?n.univ)
+                  shape = "T"
+              end
+              if(none_univ.include?n.univ)
+                  shape = "none"
+              end
+            %>
+            <a href="/result/<%=n.univ%>">
+                <li class="col-md-4">
+                    <img src="/assets/<%=n.univ%>.jpg" class ="logo_shape_<%= shape %>"> 
+                    <h3><%=n.univ%></h3>
+                    <p>
+                        <% i=0; @univ.where("univ = ?", n.univ).group(:lineup).each do |u| %>
+                        <% if i<3 %>
+                        <%=u.lineup%>
+                        <%end%><% i+=1 %><%end%>
+                    </p>
+                </li>
+            </a>
+            <%end%>
+            </div></ul>
+        </div>
+    
+    <%else%>
+        <div class="white_box jumbotron col-md-offset-2 col-md-8 col-md-offset-2 col-xs-12" style="">
+            <div class="container" style="">
+                <h1 style="color:black; font-size:32px" align="center" > 결과값이 없습니다. </h1>
+                <h1 style="color:black; font-size:24px" align="center" > 제보 : 010_9033@naver.com </h1>
+            </div>
+        </div>
+    <%end%>
+    </div>
+</div>
+        
+<script>
+      $(function() {
+        var availableTags = <%= (Project.group(:univ).map(&:univ) + 
+        Project.group(:lineup).map(&:lineup)).to_json.html_safe %>;
+        $( "#tags" ).autocomplete({
+          source: availableTags
+        });
+      });
+</script>       
+<style>
+    .lists {margin: 0 auto; padding: 0;overflow:hidden; color:white;}
+
+.lists a {color:inherit;text-decoration:none; }
+.lists div {
+  margin: 20px;
+}
+
+.lists ul {
+  margin: 0 auto;
+  padding:0;
+  list-style-type: none;
+  width: 100%;
+}
+
+.lists h3 {
+  margin: 0;
+}
+
+.lists li img {
+  float: left;
+  margin: 0 15px 0 0;
+  max-width:50px;
+}
+
+.lists li p {
+  font: 200 12px/1.5 ;
+}
+
+.lists li {
+  padding: 10px;
+  overflow: auto;
+}
+
+.lists li:hover {
+  background: rgb(0,0,0);
+  cursor: pointer;
+}
+</style>
